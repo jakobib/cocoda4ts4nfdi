@@ -1,0 +1,88 @@
+---
+title: Cocoda4TS4NFDI
+date: 2025-07-14
+authors:
+ - name: Jakob Voß
+---
+
+# Cocoda Introduction
+
+## Example Mappings
+
+- GND <https://d-nb.info/gnd/4062527-8> *Venus (Planet)*
+- = Wikidata <http://www.wikidata.org/entity/Q313> *Venus*
+- $\approx$ DDC <http://dewey.info/class/523.42/e23/> *Venus*
+- < BK <http://uri.gbv.de/terminology/bk/39.53> *Planeten*
+
+## Cocoda in a nutshell
+
+- Web application to manage mappings
+- Mappings between entities from terminologies
+- Current code base developed since 2018
+- Client side (static files)
+- Based on JSKOS data format and Vue
+
+## Cocoda Links
+
+- <https://coli-conc.gbv.de/cocoda/>
+- <https://coli-conc.gbv.de/cocoda/nfdi4objects/>
+- <https://coli-conc.gbv.de/cocoda/ts4nfdi/>
+- <https://doi.org/10.5446/69732> Screencast
+
+---
+
+![](cocoda-screenshot.png){width=100% height=80%}
+
+## Functionality
+
+- Browse and search terminologies
+- Login via ORCID, GitHub...
+- Create, edit, delete mappings
+- Organize mappings in concordances
+- Search mappings
+- Review mappings
+
+## Missing or limited functionality
+
+- Entity sets (only favorite concepts and static concept lists)
+- Terminology collections (hard-coded in config files)
+- Upload SSSOM (but converter exists)
+- Access via MOD-API, OLS, OntoPortal...
+- Special treatment of ontologies (?)
+
+# Behind the scenes
+
+## Core Concepts
+
+- **Cocoda**: web application
+- **jskos-server**: database software to store mappings, concordances, terminologies, collections, reviews...
+- **Mapping Registry**: main mapping instance of jskos-server
+- **BARTOC**: terminology registry
+- **login-server**: AAI to delegate to IdPs
+- **cocoda-sdk**: programming library  
+  - like a client-side API Gateway
+
+## Services Architecture
+
+```{mermaid}
+graph TD
+  Cocoda --get-token-from --> login-server
+  Cocoda --mappings etc. --> jskos-server
+  jskos-server --> login-server
+  login-server --> Identity-providers
+  Cocoda --lookup --> BARTOC
+  Cocoda --config-file --> Terminology-APIs
+  BARTOC --references --> Terminology-APIs
+  Terminology-APIs --terminology data --> Cocoda
+```
+
+## Terminology configuration in BARTOC
+
+...
+
+## Use the source, Luke!
+
+- JSKOS Server <https://github.com/gbv/jskos-server>
+- Login Server <https://github.com/gbv/login-server>
+- Cocoda SDK <https://github.com/gbv/cocoda-sdk>
+- Browser-Dev-Tools and API links in Cocoda
